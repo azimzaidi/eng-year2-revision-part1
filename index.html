@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Caveat+Brush&display=swap" rel="stylesheet">
+<title>English Fun Zone – Year 2</title>
+<style>
+/* ============ STYLE : "exercise book" look ============ */
+:root{
+  --paper:#f7f0e1; --paper2:#fffdf6; --ink:#1d2a44; --soft:#66708a;
+  --tomato:#ec5b3b; --mustard:#f5b83d; --teal:#1f9d8f; --plum:#6d4aa3; --sky:#8cc8ea;
+  --good:#1b8a4f; --good-bg:#d8f3e2; --bad:#c93a3a; --bad-bg:#ffe0dc;
+  --sun:#f5b83d; --sun-d:#d99a14; --coral:#ec5b3b; --mint:#1f9d8f; --purple:#6d4aa3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Andika","Atkinson Hyperlegible","Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(rgba(29,42,68,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(29,42,68,.07) 1px,transparent 1px);
+  background-size:26px 26px;min-height:100vh;font-size:18px;line-height:1.4;-webkit-text-size-adjust:100%}
+#app{max-width:760px;margin:0 auto;padding:8px 14px 120px}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+img{max-width:100%;height:auto}
+h1{font-family:"Caveat Brush","Trebuchet MS","Segoe UI",system-ui,sans-serif;font-weight:400;font-size:3.4rem;margin:0;line-height:.95;letter-spacing:.5px}
+.muted{color:var(--soft);font-weight:700;font-size:.9rem}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:2.5px solid var(--ink);margin:0 -14px;padding:8px 14px 10px}
+.trow{display:flex;align-items:center;gap:8px}
+.chip{border:2.5px solid var(--ink);border-radius:8px;background:var(--paper2);padding:0 12px;font-weight:700;box-shadow:3px 3px 0 var(--ink);min-height:40px}
+.chip:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.chip.sun{background:var(--mustard)}
+.tl{flex:1;font-weight:700;text-align:center;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:14px;background:var(--paper2);border:2.5px solid var(--ink);border-radius:4px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:repeating-linear-gradient(135deg,var(--teal) 0 8px,#2cb7a8 8px 16px);transition:width .3s}
+
+/* cards */
+.card{background:var(--paper2);border:2.5px solid var(--ink);border-radius:10px;padding:14px;margin:14px 0;box-shadow:5px 5px 0 var(--ink)}
+.goal{border:2.5px solid var(--ink);border-radius:10px;padding:8px 14px;margin:14px 0 8px;font-weight:700;font-size:1.1rem;box-shadow:4px 4px 0 var(--ink);transform:rotate(-.6deg)}
+.goal small{display:block;font-weight:500;font-size:.85rem;opacity:.85}
+.qtext{font-size:1.35rem;font-weight:700;margin:6px 0}
+.bigemoji{font-size:5rem;text-align:center;line-height:1.1}
+.bigemoji svg{width:120px;height:120px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.speak{border:2.5px solid var(--ink);border-radius:8px;background:var(--sky);padding:2px 12px;font-weight:700;font-size:.9rem;box-shadow:3px 3px 0 var(--ink)}
+.speak:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* coach */
+.coach{display:flex;gap:10px;align-items:center;margin:10px 0;min-height:52px}
+.coach .owl{font-size:2.2rem;transform:rotate(-20deg);display:inline-block}
+.bubble{flex:1;border:2.5px solid var(--ink);border-radius:4px 14px 14px 14px;padding:6px 12px;font-weight:700;background:var(--paper2)}
+.bubble.ok{background:var(--good-bg);border-color:var(--good)}
+.bubble.no{background:var(--bad-bg);border-color:var(--bad)}
+.bubble.info{background:#fff1c4}
+
+/* hub */
+.hub{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.acard{border:2.5px solid var(--ink);border-radius:12px 12px 12px 4px;padding:14px 10px 12px;text-align:center;box-shadow:5px 5px 0 var(--ink);min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
+.acard:nth-child(odd){transform:rotate(-.8deg)}.acard:nth-child(even){transform:rotate(.8deg)}
+.acard:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.acard .num{position:absolute;top:-12px;left:10px;background:var(--ink);color:var(--paper2);border-radius:4px;padding:0 8px;font-size:.78rem;font-weight:700}
+.acard .em{font-size:2.5rem;line-height:1.1}
+.acard b{font-size:1.1rem;line-height:1.1}
+.acard span{font-size:.85rem;font-weight:700}
+.acard .st{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:0 10px;font-weight:700;margin-top:4px}
+
+/* options */
+.opts{display:grid;gap:12px;margin-top:12px}
+.opts.pics{grid-template-columns:repeat(3,1fr)}
+.opt{border:2.5px solid var(--ink);border-radius:10px;background:var(--paper2);padding:8px;font-weight:700;font-size:1.1rem;min-height:60px;box-shadow:4px 4px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.opt .e{font-size:3rem;line-height:1.1}
+.opt .e svg{width:60px;height:60px}
+.opt:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.opt.good{background:var(--good-bg);border-color:var(--good);box-shadow:4px 4px 0 var(--good)}
+.opt.bad{background:var(--bad-bg);border-color:var(--bad);animation:shake .35s;box-shadow:4px 4px 0 var(--bad);opacity:.8}
+.opt[disabled]{cursor:default}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+.learn{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff1c4;border:2.5px solid var(--ink);border-radius:10px;padding:6px 12px;margin-top:14px;font-weight:700;font-size:1.15rem}
+.learn .le{font-size:2.2rem;line-height:1}
+.learn .le svg{width:44px;height:44px}
+.how{background:#fff1c4;border:2.5px dashed var(--ink);border-radius:10px;padding:10px 14px;font-weight:700;line-height:1.45;margin:14px 0}
+.how small{display:block;color:var(--soft);font-weight:600;margin-top:4px}
+
+/* words / sentence builder */
+.word{border:2.5px solid var(--ink);border-radius:8px;background:var(--teal);color:#fff;font-weight:700;font-size:1.2rem;padding:2px 14px;min-height:46px;box-shadow:3px 3px 0 var(--ink)}
+.word:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* sort */
+.profiles{display:grid;gap:10px;margin:10px 0}
+.prof{border:2.5px solid var(--ink);border-radius:10px;padding:6px 10px;font-size:1rem;background:var(--paper2)}
+.prof b{font-size:1.1rem}
+.flags{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.flag{border:2.5px solid var(--ink);border-radius:10px;background:var(--paper2);padding:8px 2px;font-weight:700;box-shadow:4px 4px 0 var(--ink);font-size:1rem;display:flex;flex-direction:column;align-items:center}
+.flag .e{font-size:2.2rem;line-height:1.1}
+.flag.good{background:var(--good-bg);border-color:var(--good)}
+.flag.bad{background:var(--bad-bg);border-color:var(--bad);animation:shake .35s}
+
+/* spell */
+.slots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.sl{width:52px;height:60px;border:2.5px solid var(--ink);border-radius:8px;display:grid;place-items:center;font-size:1.9rem;font-weight:700;background:var(--paper2)}
+.sl.first{background:var(--sky)}
+.sl.good{background:var(--good-bg);border-color:var(--good)}
+.sl.rev{background:#ffe9c9}
+.sl.bad{background:var(--bad-bg);animation:shake .35s}
+.tiles{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.ltile{width:56px;height:56px;border:2.5px solid var(--ink);border-radius:10px;background:var(--mustard);font-weight:700;font-size:1.7rem;box-shadow:3px 3px 0 var(--ink);transform:rotate(-2deg)}
+.ltile:nth-child(even){transform:rotate(2deg)}
+.ltile.used{opacity:.2;cursor:default}
+.ltile:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* count */
+.objs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.obj{position:relative;width:64px;height:64px;border:2.5px solid transparent;border-radius:10px;background:#f1ece0;font-size:2.4rem;padding:0;line-height:1}
+.obj.on{background:var(--mustard);border-color:var(--ink)}
+.obj i{position:absolute;right:-4px;top:-8px;background:var(--plum);color:#fff;border-radius:50%;width:26px;height:26px;font-size:.95rem;font-style:normal;font-weight:700;display:grid;place-items:center;border:2px solid #fff}
+.count-say{text-align:center;font-size:1.3rem;font-weight:700}
+.count-say b{font-size:2.6rem;color:var(--plum)}
+
+/* sentence builder */
+.line{min-height:64px;border:2.5px dashed var(--ink);border-radius:10px;background:var(--paper2);padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.line .ph{color:var(--soft);font-weight:700}
+.line .dot{font-size:1.6rem;font-weight:700}
+.line.good{border-color:var(--good);background:var(--good-bg);border-style:solid}
+.line.bad{animation:shake .35s;border-color:var(--bad)}
+.wbank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.hint{display:inline-flex;align-items:center;gap:6px;border:2.5px solid var(--ink);border-radius:6px;background:var(--paper2);padding:0 12px;font-weight:700}
+.sw{display:inline-block;width:18px;height:18px;border-radius:50%;border:2px solid var(--ink)}
+.stage{text-align:center;background:#fff4dc;border:2.5px solid var(--ink);border-radius:10px;padding:10px}
+.stage .who{font-size:4.2rem;line-height:1}
+.stage svg{width:130px;height:130px}
+
+/* week */
+.days{display:grid;gap:8px;margin:8px 0}
+.day{display:flex;align-items:center;gap:10px;border:2.5px solid var(--ink);border-radius:8px;background:var(--paper2);padding:4px 10px;text-align:left;min-height:54px;font-weight:700}
+.day.sel{background:var(--mustard);box-shadow:3px 3px 0 var(--ink)}
+.day .de{font-size:1.8rem;width:40px;text-align:center}
+.pal{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0}
+.pal button{border:2.5px solid var(--ink);border-radius:8px;background:var(--paper2);padding:4px 0;font-size:.72rem;font-weight:700;box-shadow:3px 3px 0 var(--ink);display:flex;flex-direction:column;align-items:center;line-height:1.1;min-height:74px;justify-content:center}
+.pal button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.pal button .e{font-size:1.9rem}
+.mine{background:repeating-linear-gradient(transparent 0 31px,rgba(29,42,68,.18) 31px 32px),#fffdf6;border:2.5px solid var(--ink);border-radius:10px;padding:2px 14px;font-size:1.1rem;line-height:32px}
+
+/* bottom nav */
+.navbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper);border-top:2.5px solid var(--ink);padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+.navbar .in{max-width:760px;margin:0 auto;display:flex;gap:10px}
+.btn{border:2.5px solid var(--ink);border-radius:10px;padding:8px 16px;font-weight:700;font-size:1.05rem;box-shadow:4px 4px 0 var(--ink);background:var(--paper2);min-height:52px;white-space:nowrap}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.go{background:var(--tomato);color:#fff;flex:1.4}
+.btn.mint{background:var(--teal);color:#fff}
+.btn.big{width:100%;font-size:1.3rem}
+.btn[disabled]{opacity:.35;cursor:not-allowed;box-shadow:2px 2px 0 var(--ink)}
+.btn.sm{min-height:42px;padding:2px 14px;font-size:1rem;box-shadow:3px 3px 0 var(--ink)}
+.name-in{width:100%;border:2.5px solid var(--ink);border-radius:8px;padding:10px 12px;font-size:1.25rem;font-family:inherit;margin:8px 0 6px;background:#fff;color:var(--ink)}
+.name-in:focus{outline:3px solid var(--sky);outline-offset:1px}
+.lab{font-weight:700;font-size:1.1rem}
+.req{color:var(--tomato)}
+.err{color:var(--bad);font-weight:700;font-size:.9rem;margin:2px 0 10px}
+.savednote{margin-top:14px;font-weight:700;font-size:.95rem;color:var(--soft)}
+.savednote small{display:block;font-weight:600}
+.warn{background:#fff1c4;border:2.5px dashed var(--ink);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.95rem;margin:14px 0}
+.score{text-align:center}
+.score .big{font-family:"Caveat Brush","Trebuchet MS","Segoe UI",system-ui,sans-serif;font-size:4rem;color:var(--tomato);line-height:1}
+.pbar{display:grid;grid-template-columns:38px 1fr 54px;gap:8px;align-items:center;margin:8px 0;font-weight:700}
+.pbar .t{height:18px;background:var(--paper2);border:2.5px solid var(--ink);border-radius:4px;overflow:hidden}
+.pbar .t i{display:block;height:100%;background:var(--teal)}
+.pr{border:2.5px solid var(--ink);border-radius:8px;padding:6px 10px;margin:8px 0;background:var(--paper2);font-size:1rem}
+.pr b{color:var(--plum)}
+.pr svg{width:40px;height:40px}
+.pr .a{color:var(--good);font-weight:700}
+
+/* home */
+.hero{position:relative;text-align:left;padding:22px 18px 18px;background:var(--mustard);margin-top:22px}
+.hero .tag{margin:10px 0 0;font-weight:700}
+.hero .sticker{position:absolute;right:14px;top:-16px;background:var(--tomato);color:#fff;border:2.5px solid var(--ink);border-radius:50%;width:78px;height:78px;display:grid;place-items:center;text-align:center;font-weight:700;font-size:1.05rem;line-height:1.05;transform:rotate(10deg);box-shadow:3px 3px 0 var(--ink)}
+.hero svg{position:absolute;right:10px;bottom:6px;width:120px;height:60px}
+
+/* effects */
+.confetti{position:fixed;left:0;right:0;top:0;height:0;z-index:60;pointer-events:none}
+.confetti span{position:absolute;top:-30px;width:9px;height:15px;border:1.5px solid var(--ink);animation:fall 1.3s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.9}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 18px;border-radius:6px;font-weight:700;z-index:70}
+@media(max-width:420px){body{font-size:17px}h1{font-size:3rem}.sl{width:44px;height:54px}.obj{width:56px;height:56px;font-size:2.1rem}.btn{padding:8px 12px;font-size:1rem}.opt .e{font-size:2.5rem}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<!-- =====================================================================
+     1) DATA AKTIVITI  (cikgu boleh sunting di sini)
+     Setiap aktiviti melatih kemahiran yang sama seperti Part 1-7 dalam
+     Ujian Imbas & Uji Oktober 2026, tetapi dengan item baharu.
+     ===================================================================== -->
+<script id="data">
+"use strict";
+
+/* Paste the Google Apps Script web-app URL between the quotes to store results in your Google Sheet. */
+const SHEET_URL="https://script.google.com/macros/s/AKfycbz2tbCgwnnMFuao-R9deOw1cAV-ZIyAGeEIh6uSnOVwv1uQYQBGvl_4D690N9LJJ3rLHg/exec";
+
+const COUNTRIES = {
+  M:{name:"Malaysia", e:"🇲🇾"},
+  J:{name:"Japan",    e:"🇯🇵"},
+  E:{name:"Egypt",    e:"🇪🇬"}
+};
+const NUMW = {1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven",8:"eight",9:"nine"};
+const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+const WEEK_CHOICES = [
+  {e:"⚽",t:"play football with my friends",s:"football"},
+  {e:"🚲",t:"ride my bike at the park",s:"bike"},
+  {e:"📖",t:"read books",s:"books"},
+  {e:"🎮",t:"play computer games",s:"games"},
+  {e:"📺",t:"watch TV with my family",s:"TV"},
+  {e:"🎨",t:"draw pictures",s:"draw"},
+  {e:"🍳",t:"cook with mum",s:"cook"},
+  {e:"🪴",t:"water the plants",s:"plants"},
+  {e:"🏸",t:"play badminton",s:"badminton"},
+  {e:"🏊",t:"go swimming",s:"swim"}
+];
+
+const SKIRT_SVG='<svg viewBox="0 0 100 100" fill="#f472b6" stroke="#26324d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" role="img" aria-label="skirt"><path d="M34 20 H66 L90 84 H10 Z"/><rect x="34" y="14" width="32" height="9" rx="3"/></svg>';
+const HEAD_SVG='<svg viewBox="0 0 130 120" role="img" aria-label="head" stroke="#26324d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><circle cx="30" cy="70" r="9" fill="#ffd9b3"/><circle cx="90" cy="70" r="9" fill="#ffd9b3"/><circle cx="60" cy="68" r="34" fill="#ffd9b3"/><path d="M26 62 Q26 28 60 27 Q94 28 94 62 Q80 46 60 48 Q40 46 26 62Z" fill="#26324d"/><circle cx="48" cy="72" r="4" fill="#26324d"/><circle cx="72" cy="72" r="4" fill="#26324d"/><path d="M48 86 Q60 96 72 86" fill="none"/><path d="M114 18 L86 36" fill="none" stroke-width="5"/><path d="M86 36 L93 24 M86 36 L100 37" fill="none" stroke-width="5"/></svg>';
+/* Clothes vocabulary: [word, picture, Malay]. Hat and cap are never used as wrong options for each other. */
+const CLOTHES=[
+  {w:"T-shirt",e:"👕",bm:"baju-T"},
+  {w:"trousers",e:"👖",bm:"seluar panjang"},
+  {w:"shorts",e:"🩳",bm:"seluar pendek"},
+  {w:"skirt",e:SKIRT_SVG,bm:"skirt"},
+  {w:"dress",e:"👗",bm:"gaun"},
+  {w:"jacket",e:"🧥",bm:"jaket"},
+  {w:"hat",e:"👒",bm:"topi (bertepi)"},
+  {w:"cap",e:"🧢",bm:"topi (kap)"},
+  {w:"shoes",e:"👟",bm:"kasut"},
+  {w:"socks",e:"🧦",bm:"stoking"},
+  {w:"gloves",e:"🧤",bm:"sarung tangan"}
+];
+function buildClothesItems(){
+  var n=CLOTHES.length, out=[];
+  CLOTHES.forEach(function(c,k){
+    var d=[CLOTHES[(k+3)%n],CLOTHES[(k+7)%n]], pos=k%3, learn={e:c.e,w:c.w,bm:c.bm};
+    if(k%2===0){ /* picture -> choose the word */
+      var ow=[{t:d[0].w},{t:d[1].w}]; ow.splice(pos,0,{t:c.w});
+      out.push({big:c.e,q:"What is this?",bm:"Apakah ini? Pilih perkataan yang betul.",opts:ow,a:pos,fb:c.w+" = "+c.bm,learn:learn});
+    } else {     /* word -> choose the picture */
+      var op=[{e:d[0].e,t:d[0].w,hide:true},{e:d[1].e,t:d[1].w,hide:true}]; op.splice(pos,0,{e:c.e,t:c.w,hide:true});
+      out.push({q:"Tap the "+c.w+".",bm:"Tekan gambar "+c.bm+".",opts:op,a:pos,fb:c.w+" = "+c.bm,learn:learn});
+    }
+  });
+  return out;
+}
+
+const ACTS = [
+  /* ---------- Activity 1: Picture Pick (Part 1) ---------- */
+ /* Items 1-5 = the five Part 1 questions of the Oct 2026 paper; items 6-13 = extra practice on other topics */
+ {id:1, name:"Picture Pick", em:"🖼️", color:"#ffcf70", type:"pick",
+  goal:"👆 Read the question. Tap the right answer.", ms:"Baca soalan. Tekan jawapan yang betul.",
+  items:[
+   {big:"🧒⚽", q:"How do you keep fit?", bm:"Bagaimana kamu kekal cergas?", opts:[{t:"I watch TV."},{t:"I play football."},{t:"I eat sweets."}], a:1},
+   {big:"🏜️🌵", q:"Which animal lives here?", bm:"Haiwan manakah yang tinggal di sini? (padang pasir)", opts:[{e:"🐻‍❄️",t:"polar bear"},{e:"🐯",t:"tiger"},{e:"🐫",t:"camel"}], a:2},
+   {big:"👧🍎", q:"What is she doing?", bm:"Apakah yang sedang dia lakukan?", opts:[{t:"She is playing ball."},{t:"She is riding a bike."},{t:"She is eating an apple."}], a:2},
+   {big:"🧤🐑", q:"Wool keeps us ________.", bm:"Bulu biri-biri (wool) membuat kita ________.", opts:[{t:"cool"},{t:"warm"},{t:"strong"}], a:1},
+   {big:"🌧️☔", q:"What's the weather like?", bm:"Bagaimanakah cuaca hari ini?", opts:[{t:"It's sunny."},{t:"It's snowing."},{t:"It's raining."}], a:2},
+   {big:"🌊", q:"Which animal lives in the sea?", bm:"Haiwan manakah yang tinggal di laut?", opts:[{e:"🐘",t:"elephant"},{e:"🐟",t:"fish"},{e:"🐒",t:"monkey"}], a:1},
+   {big:"👦📖", q:"What is he doing?", bm:"Apakah yang sedang dia lakukan?", opts:[{t:"He is reading a book."},{t:"He is sleeping."},{t:"He is swimming."}], a:0},
+   {big:"🚜", q:"Which animal lives on a farm?", bm:"Haiwan manakah yang tinggal di ladang?", opts:[{e:"🦁",t:"lion"},{e:"🐧",t:"penguin"},{e:"🐄",t:"cow"}], a:2},
+   {big:"🌬️", q:"What's the weather like?", bm:"Bagaimanakah cuaca hari ini?", opts:[{t:"It's snowing."},{t:"It's windy."},{t:"It's hot."}], a:1},
+   {big:"🚴", q:"What do we wear to keep our head safe when we ride a bike?", bm:"Apakah yang kita pakai untuk melindungi kepala semasa berbasikal?", opts:[{e:"🧦",t:"socks"},{e:"⛑️",t:"a helmet"},{e:"👟",t:"shoes"}], a:1},
+   {big:"🦷", q:"How can we keep our teeth clean?", bm:"Bagaimana kita menjaga gigi supaya bersih?", opts:[{t:"I brush my teeth."},{t:"I eat sweets."},{t:"I watch TV."}], a:0},
+   {big:"🚰", q:"Which drink is good for our body?", bm:"Minuman manakah yang baik untuk badan kita?", opts:[{e:"🥤",t:"soda"},{e:"💧",t:"water"},{e:"🧋",t:"sweet milk tea"}], a:1},
+   {big:"🌤️", q:"Which animal can fly?", bm:"Haiwan manakah yang boleh terbang?", opts:[{e:"🐦",t:"bird"},{e:"🐘",t:"elephant"},{e:"🐟",t:"fish"}], a:0}
+  ]},
+
+ /* ---------- Activity 2: Clothes Words (replaces Story Words) ---------- */
+ {id:2, name:"Clothes Words", em:"👕", color:"#8fd9c7", type:"pick",
+  goal:"👕 Look. Choose the right word or picture.", ms:"Lihat. Pilih perkataan atau gambar pakaian yang betul.",
+  items:buildClothesItems()},
+
+/* ---------- Activity 3: Country Sort (Part 4) ---------- */
+ {id:3, name:"Country Sort", em:"🌍", color:"#c1b0f2", type:"sort",
+  goal:"🌍 Which country? Tap a flag.", ms:"Baca. Pilih negara yang betul.",
+  profiles:[
+   {k:"M", text:"I am Ali. I live in Malaysia. It is hot and sunny. I go to the beach with my family. I eat rice and chicken."},
+   {k:"J", text:"I am Yuki. I am from Japan. There are big mountains. In winter, it is very cold. I play in the snow. I eat fish and rice."},
+   {k:"E", text:"I am from Egypt. It is hot and dry. There are big pyramids in the desert. I ride a camel with my dad."}
+  ],
+  items:[
+   {e:"❄️", q:"In winter, it is very cold.", a:"J"},
+   {e:"🔺", q:"You can see big pyramids.", a:"E"},
+   {e:"🍗", q:"You can eat rice and chicken.", a:"M"},
+   {e:"🗻", q:"There are big mountains.", a:"J"},
+   {e:"🏖️", q:"You can go to the beach with your family.", a:"M"},
+   {e:"🐫", q:"You can ride a camel with your dad.", a:"E"}
+  ]},
+
+ /* ---------- Activity 4: Spell It! (Part 5) ---------- */
+ {id:4, name:"Spell It!", em:"🔤", color:"#8fc9ee", type:"spell",
+  goal:"🔤 Tap the letters in order.", ms:"Tekan huruf mengikut susunan. Huruf pertama sudah ada.",
+  items:[
+   {w:"ear",   e:"👂", bm:"telinga"},
+   {w:"nose",  e:"👃", bm:"hidung"},
+   {w:"mouth", e:"👄", bm:"mulut"},
+   {w:"foot",  e:"🦶", bm:"kaki (tapak)"},
+   {w:"finger",e:"☝️", bm:"jari"},
+   {w:"knee",  img:"q25", bm:"lutut"},
+   {w:"head",  svg:HEAD_SVG, bm:"kepala"},
+   {w:"hand",  e:"✋", bm:"tangan"},
+   {w:"leg",   e:"🦵", bm:"kaki (betis)"},
+   {w:"arm",   e:"💪", bm:"lengan"}
+  ]},
+
+ /* ---------- Activity 5: Count & Write (Part 6) ---------- */
+ {id:5, name:"Count & Write", em:"🔢", color:"#ffb8a0", type:"count",
+  goal:"🔢 Tap to count. Then build the sentence.", ms:"Tekan setiap gambar untuk mengira. Kemudian susun ayat.",
+  items:[
+   {n:4, noun:"balloons", e:"🎈"},
+   {n:6, noun:"apples",   e:"🍎"},
+   {n:5, noun:"stars",    e:"⭐"},
+   {n:7, noun:"flowers",  e:"🌸"},
+   {n:8, noun:"ducks",    e:"🦆"}
+  ]},
+
+ /* ---------- Activity 6: Fashion Show (Part 7) ---------- */
+ {id:6, name:"Fashion Show", em:"👗", color:"#c4e590", type:"dress",
+  goal:"👗 Look. Build the sentence.", ms:"Lihat pakaian. Susun ayat.",
+  items:[
+   {name:"Mia",  who:"👧", color:"blue",   hex:"#3b82f6", kind:"skirt",    noun:"skirt",    pr:"She", art:true},
+   {name:"Ben",  who:"👦", color:"green",  hex:"#22a559", kind:"jacket",   noun:"jacket",   pr:"He",  art:true},
+   {name:"Lily", who:"👧", color:"purple", hex:"#8b5cf6", kind:"hat",      noun:"hat",      pr:"She", art:true},
+   {name:"Sam",  who:"👦", color:"yellow", hex:"#fbbf24", kind:"tshirt",   noun:"T-shirt",  pr:"He",  art:true},
+   {name:"Adam", who:"👦", color:"black",  hex:"#1f2937", kind:"trousers", noun:"trousers", pr:"He",  art:false},
+   {name:"Dina", who:"👧", color:"pink",   hex:"#f472b6", kind:"dress",    noun:"dress",    pr:"She", art:true}
+  ]},
+
+ /* ---------- Activity 7: My Week (Part 7 writing) ---------- */
+ {id:7, name:"My Week", em:"📅", color:"#f6b3cf", type:"week",
+  goal:"📅 Pick an activity for each day.", ms:"Pilih aktiviti untuk setiap hari. Tiada markah — tetapi salin ayat ke buku tulis!"}
+];
+</script>
+
+<!-- =====================================================================
+     2) ENJIN (logik & paparan)
+     ===================================================================== -->
+<script id="engine">
+"use strict";
+const PRAISE=["Great job!","Super!","Well done!","You got it!","Wow, nice!","Yes! Correct!"];
+const state={done:{},saved:{},submitted:false,screen:"home",name:"",actId:0,i:0,res:{},cur:null,snd:true,week:[],weekDone:false,sel:0,showReport:false};
+
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function act(id){return ACTS.filter(function(a){return a.id===id;})[0];}
+function A(){return act(state.actId);}
+function nItems(a){return a.type==="week"?1:a.items.length;}
+function starsOf(id){var r=state.res[id]||[];return r.filter(function(x){return x&&x.r==="first";}).length;}
+function totalStars(){var s=0;ACTS.forEach(function(a){if(a.type!=="week")s+=starsOf(a.id);});return s;}
+function maxStars(){var s=0;ACTS.forEach(function(a){if(a.type!=="week")s+=nItems(a);});return s;}
+
+/* ---------- bunyi & kesan ---------- */
+var AC=null;
+function tone(f,t,d,v){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    var o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.value=f;
+    g.gain.setValueAtTime(v||0.12,AC.currentTime+t);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+t+d);
+    o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+0.02);
+  }catch(e){}
+}
+function sfx(k){if(!state.snd)return; if(k==="ok"){tone(660,0,.12);tone(880,.1,.12);tone(1100,.2,.18);} else if(k==="no"){tone(220,0,.18,.1);tone(180,.14,.22,.1);} else if(k==="done"){tone(523,0,.12);tone(659,.12,.12);tone(784,.24,.12);tone(1047,.36,.3);}}
+function confetti(n){
+  var c=document.createElement("div");c.className="confetti";var col=["#ec5b3b","#f5b83d","#1f9d8f","#6d4aa3","#8cc8ea"];
+  for(var i=0;i<(n||14);i++){var s=document.createElement("span");s.style.background=rnd(col);s.style.left=(Math.random()*95)+"%";s.style.animationDelay=(Math.random()*.3)+"s";c.appendChild(s);}
+  document.body.appendChild(c);setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c);},1800);
+}
+function speak(text,quiet){
+  if(!("speechSynthesis" in window)){if(!quiet)toast("No sound on this device.");return;}
+  try{window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(String(text).replace(/_+/g," blank "));u.lang="en-GB";u.rate=.85;window.speechSynthesis.speak(u);}catch(e){}
+}
+function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},2200);}
+function spk(text){return '<button class="speak" data-do="speak" data-text="'+esc(text)+'" aria-label="Listen">🔊 Listen</button>';}
+
+/* ---------- pakaian (SVG) ---------- */
+function cloth(kind,fill){
+  var P={
+    tshirt:'<path d="M30 18 L8 36 L20 52 L30 45 L30 88 L70 88 L70 45 L80 52 L92 36 L70 18 Q50 32 30 18Z"/>',
+    jacket:'<path d="M34 12 L6 40 L14 86 L28 84 L30 50 L30 90 L70 90 L70 50 L72 84 L86 86 L94 40 L66 12 L50 26Z"/><path d="M50 26 V90" fill="none"/>',
+    skirt:'<path d="M34 20 H66 L90 84 H10 Z"/><rect x="34" y="14" width="32" height="9" rx="3"/>',
+    trousers:'<path d="M28 12 H72 L78 90 H55 L50 44 L45 90 H22 Z"/>',
+    dress:'<path d="M40 8 L46 8 Q50 20 54 8 L60 8 L64 36 L90 88 H10 L36 36 Z"/>',
+    hat:'<path d="M6 64 Q50 84 94 64 Q86 58 72 56 Q72 18 50 18 Q28 18 28 56 Q14 58 6 64Z"/><path d="M29 54 Q50 62 71 54" fill="none"/>'
+  };
+  return '<svg viewBox="0 0 100 100" role="img" aria-label="clothes" fill="'+fill+'" stroke="#26324d" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">'+P[kind]+'</svg>';
+}
+
+/* ---------- data pembantu ---------- */
+function itemMeta(a,i){
+  var it=a.items?a.items[i]:null;
+  if(a.type==="pick") return {q:it.q,a:it.opts[it.a].t};
+  if(a.type==="sort") return {q:it.q,a:COUNTRIES[it.a].name};
+  if(a.type==="spell") return {q:"Spell: "+it.bm,a:it.w};
+  if(a.type==="count") return {q:"Count the "+it.noun,a:sentenceOf(a,i)};
+  if(a.type==="dress") return {q:it.name+": "+it.color+" "+it.noun,a:sentenceOf(a,i)};
+  return {q:"",a:""};
+}
+function wordsOf(a,i){
+  var it=a.items[i];
+  if(a.type==="count") return ["There","are",NUMW[it.n],it.noun];
+  if(a.type==="dress"){return it.art?[it.pr,"is","wearing","a",it.color,it.noun]:[it.pr,"is","wearing",it.color,it.noun];}
+  return [];
+}
+function sentenceOf(a,i){return wordsOf(a,i).join(" ")+".";}
+function extrasOf(a,i){
+  var it=a.items[i];
+  if(a.type==="count"){var o=[NUMW[it.n+1]||NUMW[it.n-1],"is"];return o;}
+  if(a.type==="dress"){return [it.pr==="He"?"She":"He", it.art?"are":"a"];}
+  return [];
+}
+
+/* ---------- setup ---------- */
+function setupItem(){
+  var a=A(), i=state.i;
+  var c={tries:0,solved:false,msg:"",kind:"",wrong:[]};
+  if(a.type==="spell"){
+    var w=a.items[i].w, rest=w.slice(1).split("").map(function(ch,k){return {id:k,ch:ch};}), t, g=0;
+    do{t=shuffle(rest);g++;}while(t.map(function(x){return x.ch;}).join("")===w.slice(1)&&g<20&&w.length>2);
+    c.tiles=t;c.picked=[];
+  }
+  if(a.type==="count"){c.order=[];c.ans=[];c.bank=shuffle(wordsOf(a,i).concat(extrasOf(a,i)));}
+  if(a.type==="dress"){c.ans=[];c.bank=shuffle(wordsOf(a,i).concat(extrasOf(a,i)));}
+  state.cur=c;
+}
+function sendRecord(rec){
+  if(!SHEET_URL||!state.name)return;
+  try{rec.name=state.name;rec.time=new Date().toISOString();
+    fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(rec),keepalive:true}).catch(function(){});}catch(e){}
+}
+function reportRecord(){
+  var names=[],scores=[],maxes=[],items=[];
+  ACTS.forEach(function(a){
+    if(a.type==="week")return;
+    var played=(state.res[a.id]||[]).filter(Boolean).length;
+    names.push(a.name);scores.push(played?starsOf(a.id):"");maxes.push(nItems(a));
+    (state.res[a.id]||[]).forEach(function(x){if(x&&x.r!=="first")items.push(x.q+" → "+x.a);});
+  });
+  var t=totalStars(),m=maxStars();
+  return {total:t,max:m,pct:Math.round(t/m*100),names:names,scores:scores,maxes:maxes,
+    myWeek:state.weekDone?"Done":"",practise:items.join(" | "),weekText:state.weekDone?weekText():""};
+}
+function sayIf(t){if(state.snd)speak(t,true);}
+function pKey(){return "efz_"+state.name.toLowerCase();}
+function persist(){
+  if(!state.name)return;
+  try{localStorage.setItem(pKey(),JSON.stringify({res:state.res,done:state.done,saved:state.saved,week:state.week,weekDone:state.weekDone,submitted:state.submitted,sel:state.sel}));}catch(e){}
+}
+function restore(){
+  state.res={};state.done={};state.saved={};state.week=[];state.weekDone=false;state.submitted=false;state.sel=0;
+  try{var j=JSON.parse(localStorage.getItem(pKey())||"null");
+    if(j){state.res=j.res||{};state.done=j.done||{};state.saved=j.saved||{};state.week=j.week||[];state.weekDone=!!j.weekDone;state.submitted=!!j.submitted;state.sel=j.sel||0;}}catch(e){}
+}
+/* A finished activity cannot be replayed: it opens in review mode and the first attempt keeps the marks. */
+function startAct(id){
+  state.lastRead="";state.actId=id;
+  if(state.done[id]){state.screen="review";render();return;}
+  state.screen="act";
+  if(act(id).type==="week"){state.cur={};}
+  else if(state.saved[id]){state.i=state.saved[id].i;state.cur=state.saved[id].cur;}
+  else{state.i=0;state.res[id]=[];setupItem();}
+  render();
+}
+function record(r,idx){
+  var a=A(), m=itemMeta(a,idx===undefined?state.i:idx), k=idx===undefined?state.i:idx;
+  state.res[a.id][k]={r:r,q:m.q,a:m.a};
+}
+function good(idx){
+  var c=state.cur; var first=(idx===undefined?c.tries:c.bt[idx])===0;
+  record(first?"first":"second",idx);
+  c.msg=rnd(PRAISE)+(first?"":" (2nd try)");c.kind="ok";
+  sfx("ok");confetti(first?16:8);
+}
+function bad(correctText,idx){
+  var c=state.cur;
+  if(idx===undefined){c.tries++;} else {c.bt[idx]++;}
+  var t=idx===undefined?c.tries:c.bt[idx];
+  if(t>=2){record("reveal",idx);c.msg="The answer is: "+correctText;c.kind="info";sfx("no");return true;}
+  c.msg="Not quite. Try again!";c.kind="no";sfx("no");return false;
+}
+
+/* ---------- paparan ---------- */
+function coach(){var c=state.cur;if(!c||!c.msg)return '<div class="coach"><span class="owl">✏️</span><div class="bubble info">Let\'s go!</div></div>';return '<div class="coach"><span class="owl">✏️</span><div class="bubble '+c.kind+'">'+esc(c.msg)+'</div></div>';}
+function goalHtml(a){return '<div class="goal" style="background:'+a.color+'">'+esc(a.goal)+'<small>'+esc(a.ms)+'</small></div>';}
+function topbar(){
+  var a=A(), n=nItems(a), label=a.type==="week"?"5 days":(state.i+1)+" of "+n;
+  var done=state.i+(state.cur&&state.cur.solved?1:0);
+  var pct=a.type==="week"?(state.week.filter(Boolean).length*20):Math.round(done/n*100);
+  return '<div class="topbar"><div class="trow"><button class="chip" data-do="hub" aria-label="Back to activities">🏠</button><div class="tl">'+esc(a.em+" "+a.name)+' · '+label+'</div><button class="chip" data-do="snd" aria-label="Sound">'+(state.snd?"🔊":"🔇")+'</button></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+}
+function pickHtml(a,it){
+  var c=state.cur, allE=it.opts.every(function(o){return o.e;});
+  var h='<div class="card">'+(it.big?'<div class="bigemoji">'+it.big+'</div>':'')+'<div class="qtext">'+esc(it.q)+'</div>'+(it.bm?'<div class="muted" style="margin-bottom:6px">'+esc(it.bm)+'</div>':'')+spk(it.q)+'<div class="opts'+(allE?" pics":"")+'">';
+  it.opts.forEach(function(o,k){
+    var cls="opt"+(c.wrong.indexOf(k)>=0?" bad":"")+((c.solved&&k===it.a)?" good":"");
+    h+='<button class="'+cls+'" data-do="pick" data-k="'+k+'" aria-label="'+esc(o.t)+'"'+((c.solved||c.wrong.indexOf(k)>=0)?" disabled":"")+'>'+(o.e?'<span class="e">'+o.e+'</span>':'')+(o.hide?'':'<span>'+esc(o.t)+'</span>')+'</button>';
+  });
+  h+='</div>';
+  if(c.solved&&it.learn){h+='<div class="learn"><span class="le">'+it.learn.e+'</span><span>'+esc(it.learn.w)+' <span class="muted">= '+esc(it.learn.bm)+'</span></span>'+spk(it.learn.w)+'</div>';}
+  return h+'</div>';
+}
+function sortHtml(a,it){
+  var c=state.cur, h='<div class="profiles">';
+  a.profiles.forEach(function(p){h+='<div class="prof"><b>'+COUNTRIES[p.k].e+' '+COUNTRIES[p.k].name+'</b><br>'+esc(p.text)+'</div>';});
+  h+='</div><div class="card" style="text-align:center"><div class="bigemoji">'+it.e+'</div><div class="qtext">'+esc(it.q)+'</div>'+spk(it.q)+'<div class="flags">';
+  ["M","J","E"].forEach(function(k){
+    var cls="flag"+(c.wrong.indexOf(k)>=0?" bad":"")+((c.solved&&k===it.a)?" good":"");
+    h+='<button class="'+cls+'" data-do="flag" data-k="'+k+'"'+((c.solved||c.wrong.indexOf(k)>=0)?" disabled":"")+'><span class="e">'+COUNTRIES[k].e+'</span>'+COUNTRIES[k].name+'</button>';
+  });
+  return h+'</div></div>';
+}
+function spellHtml(a,it){
+  var c=state.cur, w=it.w, st=c.solved?(state.res[a.id][state.i].r==="reveal"?"rev":"good"):"";
+  var h='<div class="card" style="text-align:center">'+(it.svg?'<div class="bigemoji">'+it.svg+'</div>':it.img?'<img src="'+IMG[it.img]+'" alt="body part" style="max-height:170px;border:3px solid #26324d;border-radius:14px">':'<div class="bigemoji">'+it.e+'</div>')+
+    '<div class="muted">'+esc(it.bm)+'</div><div class="slots">';
+  for(var k=0;k<w.length;k++){
+    var ch=k===0?w[0]:(c.solved?w[k]:(c.picked[k-1]!==undefined?c.tiles[c.picked[k-1]].ch:""));
+    h+='<div class="sl'+(k===0?" first":"")+(st&&k>0?" "+st:"")+(c.badSlots&&k>0?" bad":"")+'">'+esc(ch)+'</div>';
+  }
+  h+='</div><div class="tiles">';
+  c.tiles.forEach(function(t,k){var u=c.picked.indexOf(k)>=0||c.solved;h+='<button class="ltile'+(u?" used":"")+'" data-do="ltile" data-k="'+k+'"'+(u?" disabled":"")+'>'+esc(t.ch)+'</button>';});
+  h+='</div><div class="row" style="justify-content:center"><button class="btn sm" data-do="lback"'+(c.solved?" disabled":"")+'>⌫ Undo</button><button class="btn sm" data-do="lclear"'+(c.solved?" disabled":"")+'>↺ Clear</button></div></div>';
+  c.badSlots=false;
+  return h;
+}
+function lineHtml(){
+  var c=state.cur, h='<div class="line'+(c.solved?(c.revealed?"":" good"):"")+(c.shake?" bad":"")+'">';
+  if(!c.ans.length)h+='<span class="ph">Tap the words ⬇</span>';
+  c.ans.forEach(function(w){h+='<button class="word" style="background:var(--sun);color:var(--ink);text-shadow:none" data-do="wun" data-w="'+esc(w)+'"'+(c.solved?" disabled":"")+'>'+esc(w)+'</button>';});
+  h+='<span class="dot">.</span></div><div class="wbank">';
+  c.bank.filter(function(w){return c.ans.indexOf(w)<0;}).forEach(function(w){h+='<button class="word" data-do="wtile" data-w="'+esc(w)+'"'+(c.solved?" disabled":"")+'>'+esc(w)+'</button>';});
+  h+='</div><div class="row" style="justify-content:center"><button class="btn sm" data-do="wclear"'+(c.solved?" disabled":"")+'>↺ Clear</button><button class="btn sm mint" data-do="wcheck"'+((c.solved||!c.ans.length)?" disabled":"")+'>Check ✔</button></div>';
+  c.shake=false;
+  return h;
+}
+function countHtml(a,it){
+  var c=state.cur, counted=c.order.length, h='<div class="card"><div class="qtext" style="margin-top:0;text-align:center">How many '+esc(it.noun)+'?</div><div class="objs">';
+  for(var k=0;k<it.n;k++){var p=c.order.indexOf(k);h+='<button class="obj'+(p>=0?" on":"")+'" data-do="obj" data-k="'+k+'" aria-label="count">'+it.e+(p>=0?'<i>'+(p+1)+'</i>':'')+'</button>';}
+  h+='</div>';
+  if(counted<it.n){h+='<div class="count-say muted">Tap each one ☝️ ('+counted+')</div><div style="text-align:center"><button class="btn sm" data-do="oreset">↺ Count again</button></div>';}
+  else{h+='<div class="count-say">I count: <b>'+it.n+'</b></div><div class="qtext" style="text-align:center">Write: There are ___ '+esc(it.noun)+'.</div>'+lineHtml();}
+  return h+'</div>';
+}
+function dressHtml(a,it){
+  var h='<div class="card"><div class="stage"><div class="who">'+it.who+'</div><div class="qtext" style="margin:0">This is '+esc(it.name)+'.</div>'+cloth(it.kind,it.hex)+'<div><span class="hint"><span class="sw" style="background:'+it.hex+'"></span>'+esc(it.color)+' - '+esc(it.noun)+'</span></div></div>'+
+    '<div class="qtext" style="margin-top:10px">What is '+(it.pr==="He"?"he":"she")+' wearing?</div>'+lineHtml()+'</div>';
+  return h;
+}
+function weekHtml(){
+  var h='<div class="how">✏️ Choose an activity for each day. Read your sentences and write them in your English exercise book.<small>Pilih aktiviti untuk setiap hari. Baca ayat yang terhasil dan salin ayat tersebut ke dalam buku tulis Bahasa Inggeris.</small></div><div class="card"><div class="days">';
+  DAYS.forEach(function(d,k){var ch=state.week[k];h+='<button class="day'+(state.sel===k?" sel":"")+'" data-do="day" data-k="'+k+'"><span class="de">'+(ch?ch.e:"❓")+'</span><span>'+d+'</span></button>';});
+  h+='</div><div class="muted" style="margin:6px 0">Pick for <b>'+DAYS[state.sel]+'</b> 👇</div><div class="pal">';
+  WEEK_CHOICES.forEach(function(w,k){h+='<button data-do="wk" data-k="'+k+'"><span class="e">'+w.e+'</span>'+esc(w.s)+'</button>';});
+  h+='</div></div>';
+  var all=state.week.filter(Boolean).length===5;
+  var txt=weekText();
+  h+='<div class="card"><div class="muted">📝 My week</div><div class="mine">'+(txt?esc(txt):"Your sentences will appear here…")+'</div>'+(all?'<div class="how" style="margin-top:10px">📒 Now write these sentences in your English exercise book.<small>Sekarang salin ayat-ayat ini ke dalam buku tulis Bahasa Inggeris kamu.</small></div><div class="row" style="margin-top:8px">'+spk(txt)+'<button class="speak" data-do="wcopy">📋 Copy</button></div>':'')+'</div>';
+  return h;
+}
+function weekText(){
+  var s="";DAYS.forEach(function(d,k){var ch=state.week[k];if(ch)s+="On "+d+"s, I "+ch.t+". ";});
+  if(state.week.filter(Boolean).length===5)s+="This is my week.";
+  return s.trim();
+}
+function actBody(){
+  var a=A(), c=state.cur, it=a.items?a.items[state.i]:null, h=goalHtml(a);
+  if(a.type==="week") return h+weekHtml();
+  if(a.type==="pick") h+=coach()+pickHtml(a,it);
+  else if(a.type==="sort") h+=coach()+sortHtml(a,it);
+  else if(a.type==="spell") h+=coach()+spellHtml(a,it);
+  else if(a.type==="count") h+=coach()+countHtml(a,it);
+  else if(a.type==="dress") h+=coach()+dressHtml(a,it);
+  return h;
+}
+function navAct(){
+  var a=A(), c=state.cur, last, can;
+  if(a.type==="week"){var all=state.week.filter(Boolean).length===5;return '<div class="navbar"><div class="in"><button class="btn" data-do="hub">🏠 Menu</button><button class="btn go" data-do="weekdone"'+(all?"":" disabled")+'>Done ★</button></div></div>';}
+  can=c.solved;last=state.i===nItems(a)-1;
+  return '<div class="navbar"><div class="in"><button class="btn" data-do="hub">🏠 Menu</button><button class="btn go" data-do="next"'+(can?"":" disabled")+'>'+(last?"Finish 🏁":"Next ▶")+'</button></div></div>';
+}
+var PENCIL='<svg viewBox="0 0 120 60" aria-hidden="true"><g stroke="#1d2a44" stroke-width="3" stroke-linejoin="round"><path d="M6 30 L26 18 H104 V42 H26Z" fill="#ec5b3b"/><path d="M26 18 V42" fill="none"/><path d="M6 30 L26 18 V42Z" fill="#fff4dc"/><path d="M6 30 L12 26.5 V33.5Z" fill="#1d2a44"/><path d="M104 18 H114 V42 H104Z" fill="#8cc8ea"/></g></svg>';
+function nameOk(){return state.name.length>=2;}
+function homeHtml(){
+  return '<div class="hero card"><div class="sticker">Year<br>2</div><h1>English<br>Fun Zone</h1><p class="tag">'+ACTS.length+' activities to practise</p>'+PENCIL+'</div>'+
+    '<div class="card"><label for="nm" class="lab">Your name <span class="req">*</span></label><input id="nm" class="name-in" maxlength="40" placeholder="Taip nama kamu di sini" value="'+esc(state.name)+'" autocomplete="off" required>'+
+    '<div class="err" id="nmerr"'+(nameOk()?' hidden':'')+'>Write your name to start. / Taip nama kamu untuk mula.</div>'+
+    '<button id="startBtn" class="btn go big" data-do="start"'+(nameOk()?'':' disabled')+'>Let\'s start</button>'+
+    (SHEET_URL?'<div class="savednote">Finish the activities, then submit your report.<small>Siapkan aktiviti, kemudian hantar laporan kamu.</small></div>':'')+'</div>';
+}
+function hubHtml(){
+  var h='<div class="topbar"><div class="trow"><span class="chip sun">★ '+totalStars()+' / '+maxStars()+'</span><div class="tl">'+(state.name?esc(state.name):"Choose an activity")+'</div><button class="chip" data-do="snd" aria-label="Sound">'+(state.snd?"🔊":"🔇")+'</button></div></div><div class="hub">';
+  ACTS.forEach(function(a){
+    var st;
+    if(state.done[a.id]) st=a.type==="week"?"Review ✓":"Review ★ "+starsOf(a.id)+"/"+nItems(a);
+    else if(a.type!=="week"&&state.saved[a.id]) st="Continue";
+    else st="New";
+    h+='<button class="acard" style="background:'+a.color+'" data-do="open" data-id="'+a.id+'"><span class="num">Activity '+a.id+'</span><span class="em">'+a.em+'</span><b>'+esc(a.name)+'</b><span class="st">'+st+'</span></button>';
+  });
+  return h+'</div>';
+}
+function summaryHtml(){
+  var a=A(), n=nItems(a), s=starsOf(a.id), pct=Math.round(s/n*100);
+  var msg=pct===100?["Perfect!","Sempurna!"]:pct>=60?["Great job!","Bagus! Teruskan usaha."]:["Good try!","Tidak mengapa. Kamu boleh semak jawapan dalam Review."];
+  var h='<div class="topbar"><div class="trow"><button class="chip" data-do="hub">🏠</button><div class="tl">'+esc(a.em+" "+a.name)+'</div><span></span></div></div>'+
+    '<div class="card score"><div style="font-size:3rem">'+"★"+'</div><div class="big">★ '+s+' / '+n+'</div><div style="font-weight:800;font-size:1.2rem;margin-top:6px">'+msg[0]+'</div><div class="muted">'+msg[1]+'</div></div>';
+  if(a.type==="week"){h+='<div class="how">📒 Don\'t forget! Write your week sentences in your English exercise book.<small>Jangan lupa! Salin ayat tentang minggu kamu ke dalam buku tulis Bahasa Inggeris.</small></div>';}
+  var rev=(state.res[a.id]||[]).filter(function(x){return x&&x.r!=="first";});
+  if(rev.length){h+='<div class="card"><b>📝 Let\'s practise</b>';rev.forEach(function(x){h+='<div class="pr">'+esc(x.q)+' → <span class="a">'+esc(x.a)+'</span></div>';});h+='</div>';}
+  return h;
+}
+function reportHtml(){
+  var t=totalStars(), m=maxStars(), pct=Math.round(t/m*100);
+  var msg=pct>=90?"You are a superstar!":pct>=70?"Great job!":pct>=40?"Good try!":"Keep practising!";
+  var h='<div class="topbar"><div class="trow"><button class="chip" data-do="hub">🏠</button><div class="tl">My Report</div><span></span></div></div>'+
+    '<div class="card score">'+(state.name?'<div style="font-weight:800;font-size:1.3rem">'+esc(state.name)+'</div>':'')+'<div class="big">★ '+t+' / '+m+'</div><div style="font-weight:800;font-size:1.2rem;margin-top:6px">'+msg+'</div></div><div class="card">';
+  ACTS.forEach(function(a){
+    if(a.type==="week"){h+='<div class="pbar"><span>'+a.em+'</span><span>'+esc(a.name)+'</span><span>'+(state.weekDone?"✅":"–")+'</span></div>';return;}
+    var s=starsOf(a.id), n=nItems(a), played=(state.res[a.id]||[]).filter(Boolean).length;
+    h+='<div class="pbar"><span>'+a.em+'</span><div class="t"><i style="width:'+Math.round(s/n*100)+'%"></i></div><span>'+(played?s+"/"+n:"–")+'</span></div>';
+  });
+  h+='</div>';
+  var items=[];ACTS.forEach(function(a){(state.res[a.id]||[]).forEach(function(x){if(x&&x.r!=="first")items.push(x);});});
+  if(items.length){h+='<div class="card"><b>📝 Practise these</b>';items.forEach(function(x){h+='<div class="pr">'+esc(x.q)+' → <span class="a">'+esc(x.a)+'</span></div>';});h+='</div>';}
+  if(state.weekDone){h+='<div class="card"><b>📅 My week</b><div class="mine">'+esc(weekText())+'</div><div class="muted" style="margin-top:6px">📒 Write these sentences in your English exercise book. / Salin ke buku tulis.</div></div>';}
+  if(state.submitted)h+='<div class="warn" style="background:var(--good-bg)">Your report is sent to your teacher. Well done!<br><small>Laporan kamu sudah dihantar kepada cikgu.</small></div>';
+  else h+='<div class="warn">When you finish all the activities, press <b>Submit my report</b>.<br><small>Bila siap semua aktiviti, tekan <b>Submit my report</b> untuk hantar kepada cikgu.</small></div>';
+  return h;
+}
+function navReport(){
+  if(state.submitted) return '<div class="navbar"><div class="in"><button class="btn" data-do="hub">🏠 Menu</button><button class="btn go" disabled>Submitted ✓</button></div></div>';
+  return '<div class="navbar"><div class="in"><button class="btn" data-do="hub">🏠 Menu</button><button class="btn go" data-do="submit">Submit my report</button></div></div>';
+}
+function navSummary(){
+  var a=A(), last=a.id===ACTS.length;
+  return '<div class="navbar"><div class="in"><button class="btn" data-do="hub">🏠 Menu</button><button class="btn go" data-do="'+(last?"report":"nextact")+'">'+(last?"My report 📊":"Next activity ▶")+'</button></div></div>';
+}
+function reviewHtml(){
+  var a=A(), n=nItems(a);
+  var h='<div class="topbar"><div class="trow"><button class="chip" data-do="hub" aria-label="Back to activities">🏠</button><div class="tl">'+esc(a.em+" "+a.name)+' · Review</div><span></span></div></div>';
+  if(a.type==="week"){
+    return h+'<div class="how">📒 This activity is finished. Your sentences are below. Write them in your English exercise book.<small>Aktiviti ini sudah siap. Salin ayat ke buku tulis Bahasa Inggeris.</small></div><div class="card"><div class="mine">'+esc(weekText())+'</div><div class="row" style="margin-top:8px">'+spk(weekText())+'</div></div>';
+  }
+  h+='<div class="card score"><div class="muted">Finished. Your marks are saved from your first try.</div><div class="big">★ '+starsOf(a.id)+' / '+n+'</div><div class="muted">Selesai. Markah diambil daripada percubaan pertama.</div></div>';
+  (state.res[a.id]||[]).forEach(function(x,k){
+    if(!x)return;
+    var it=a.items[k], pic=it&&(it.big||it.svg||it.e||(it.learn&&it.learn.e))||"";
+    var tag=x.r==="first"?'<b style="color:var(--good)">★ 1st try</b>':x.r==="second"?'<b style="color:var(--plum)">2nd try</b>':'<b style="color:var(--bad)">Answer shown</b>';
+    h+='<div class="pr"><div class="row" style="flex-wrap:nowrap">'+(pic?'<span style="font-size:2rem;line-height:1;min-width:40px;text-align:center">'+pic+'</span>':'')+'<div><span class="muted">'+(k+1)+'.</span> '+esc(x.q)+'<br>→ <span class="a">'+esc(x.a)+'</span><br>'+tag+'</div></div></div>';
+  });
+  return h;
+}
+function navReview(){return '<div class="navbar"><div class="in"><button class="btn go" data-do="hub">🏠 Menu</button></div></div>';}
+function navHub(){
+  var any=ACTS.some(function(a){return (state.res[a.id]||[]).filter(Boolean).length||(a.type==="week"&&state.weekDone);});
+  return '<div class="navbar"><div class="in"><button class="btn go" data-do="report"'+(any?"":" disabled")+'>📊 See my report</button></div></div>';
+}
+function render(keep){
+  var app=document.getElementById("app"), h="";
+  if(state.screen==="home") h=homeHtml();
+  else if(state.screen==="hub") h=hubHtml()+navHub();
+  else if(state.screen==="act") h=topbar()+actBody()+navAct();
+  else if(state.screen==="summary") h=summaryHtml()+navSummary();
+  else if(state.screen==="report") h=reportHtml()+navReport();
+  else if(state.screen==="review") h=reviewHtml()+navReview();
+  if(state.screen==="act"&&A().type!=="week"&&state.cur)state.saved[state.actId]={i:state.i,cur:state.cur};
+  app.innerHTML=h;
+  if(state.screen!=="home")persist();
+  if(!keep) window.scrollTo(0,0);
+  autoRead();
+}
+/* ---------- auto read: reads each new question / new word aloud (follows the 🔊 button) ---------- */
+function autoRead(){
+  try{
+    if(!state.snd){if("speechSynthesis" in window)window.speechSynthesis.cancel();return;}
+    if(state.screen!=="act")return;
+    var a=A(),c=state.cur; if(!c||a.type==="week")return;
+    var it=a.items[state.i], key=a.id+":"+state.i, say="";
+    if(c.solved){ if(a.type==="spell"){key+=":s";say=it.w;} else if(it.learn){key+=":s";say=it.learn.w;} else return; }
+    else{
+      key+=":q";
+      if(a.type==="pick"||a.type==="sort") say=it.q;
+      else if(a.type==="spell") say=it.w;
+      else if(a.type==="count") say="How many "+it.noun+"?";
+      else if(a.type==="dress") say="This is "+it.name+". What is "+(it.pr==="He"?"he":"she")+" wearing?";
+    }
+    if(!say||state.lastRead===key)return;
+    state.lastRead=key; speak(say,true);
+  }catch(e){}
+}
+function copyText(txt){
+  function fb(){try{var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();var ok=document.execCommand("copy");document.body.removeChild(ta);return ok;}catch(e){return false;}}
+  if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(txt).then(function(){return true;},function(){return fb();});
+  return Promise.resolve(fb());
+}
+
+/* ---------- semakan setiap jenis ---------- */
+function finishWords(a,ok){
+  var c=state.cur,i=state.i,words=wordsOf(a,i);
+  if(ok){c.solved=true;good();}
+  else{
+    var rev=bad(sentenceOf(a,i));
+    if(rev){c.solved=true;c.revealed=true;c.ans=words.slice();}
+    else{c.ans=[];c.shake=true;}
+  }
+}
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-do]"); if(!t) return;
+  var d=t.getAttribute("data-do"), a=state.actId?A():null, c=state.cur, it=(a&&a.items)?a.items[state.i]:null;
+  if(d==="speak"){speak(t.getAttribute("data-text"));return;}
+  if(d==="snd"){state.snd=!state.snd;render(true);return;}
+  if(d==="start"){var nm=document.getElementById("nm");state.name=nm?nm.value.trim():state.name;if(!nameOk()){var er=document.getElementById("nmerr");if(er)er.hidden=false;if(nm)nm.focus();return;}try{localStorage.setItem("efz_name",state.name);}catch(x){}restore();state.screen="hub";render();return;}
+  if(d==="hub"){state.screen="hub";render();return;}
+  if(d==="open"){startAct(+t.getAttribute("data-id"));return;}
+  if(d==="report"){state.screen="report";render();return;}
+  if(d==="submit"){
+    if(state.submitted)return;
+    if(!SHEET_URL){toast("Submit is not ready yet. Tell your teacher.");return;}
+    if(navigator.onLine===false){toast("No internet. Try again.");return;}
+    sendRecord(reportRecord());state.submitted=true;sfx("done");confetti(24);render(true);window.scrollTo(0,0);return;}
+  if(d==="nextact"){startAct(state.actId+1);return;}
+  if(d==="next"){
+    if(state.i>=nItems(a)-1){state.done[a.id]=true;delete state.saved[a.id];state.submitted=false;state.screen="summary";sfx("done");confetti(24);render();}
+    else{state.i++;setupItem();render();}
+    return;
+  }
+  /* ---- pick ---- */
+  if(d==="pick"&&!c.solved){var k=+t.getAttribute("data-k");sayIf(it.opts[k].t);
+    if(k===it.a){good();c.solved=true;}
+    else{c.wrong.push(k);var rev=bad(it.opts[it.a].t);if(rev)c.solved=true;}
+    if(c.solved&&it.fb)c.msg+=" "+it.fb;
+    render(true);return;}
+  /* ---- sort ---- */
+  if(d==="flag"&&!c.solved){var k3=t.getAttribute("data-k");sayIf(COUNTRIES[k3].name);
+    if(k3===it.a){good();c.solved=true;}
+    else{c.wrong.push(k3);var rev3=bad(COUNTRIES[it.a].name);if(rev3)c.solved=true;}
+    render(true);return;}
+  /* ---- spell ---- */
+  if(d==="ltile"&&!c.solved){
+    sayIf(c.tiles[+t.getAttribute("data-k")].ch);
+    c.picked.push(+t.getAttribute("data-k"));
+    if(c.picked.length===it.w.length-1){
+      var got=it.w[0]+c.picked.map(function(k4){return c.tiles[k4].ch;}).join("");
+      if(got===it.w){c.solved=true;good();}
+      else{var rev4=bad(it.w);if(rev4){c.solved=true;}else{c.picked=[];c.badSlots=true;}}
+    }
+    render(true);return;}
+  if(d==="lback"){c.picked.pop();render(true);return;}
+  if(d==="lclear"){c.picked=[];render(true);return;}
+  /* ---- count ---- */
+  if(d==="obj"){var k5=+t.getAttribute("data-k");if(c.order.indexOf(k5)<0){c.order.push(k5);render(true);}return;}
+  if(d==="oreset"){c.order=[];render(true);return;}
+  /* ---- sentence tiles (count + dress) ---- */
+  if(d==="wtile"&&!c.solved){sayIf(t.getAttribute("data-w"));c.ans.push(t.getAttribute("data-w"));render(true);return;}
+  if(d==="wun"&&!c.solved){var w2=t.getAttribute("data-w");c.ans=c.ans.filter(function(x){return x!==w2;});render(true);return;}
+  if(d==="wclear"&&!c.solved){c.ans=[];render(true);return;}
+  if(d==="wcheck"&&!c.solved){finishWords(a,c.ans.join(" ")===wordsOf(a,state.i).join(" "));render(true);return;}
+  /* ---- week ---- */
+  if(d==="day"){state.sel=+t.getAttribute("data-k");render(true);return;}
+  if(d==="wk"){state.week[state.sel]=WEEK_CHOICES[+t.getAttribute("data-k")];sfx("ok");
+    var nx=-1;for(var q=1;q<=5;q++){var kk=(state.sel+q)%5;if(!state.week[kk]){nx=kk;break;}}
+    if(nx>=0)state.sel=nx;render(true);return;}
+  if(d==="wcopy"){copyText(weekText()).then(function(ok){toast(ok?"Disalin ✔":"Tidak dapat salin.");});return;}
+  if(d==="weekdone"){state.weekDone=true;state.done[state.actId]=true;state.submitted=false;state.res[state.actId]=[{r:"first",q:"My week",a:weekText()}];sfx("done");confetti(24);state.screen="summary";render();return;}
+});
+document.addEventListener("input",function(e){
+  if(e.target.id==="nm"){state.name=e.target.value.trim();var b=document.getElementById("startBtn"),er=document.getElementById("nmerr");if(b)b.disabled=!nameOk();if(er)er.hidden=nameOk();}
+});
+window.addEventListener("DOMContentLoaded",function(){try{state.name=(localStorage.getItem("efz_name")||"").trim();}catch(x){}render();});
+</script>
+
+<!-- =====================================================================
+     3) GAMBAR (JANGAN SUNTING)
+     ===================================================================== -->
+<script id="images">
+const IMG = {"q25": "data:image/webp;base64,UklGRv4PAABXRUJQVlA4IPIPAADQVACdASqYAeAAPlEokUYjoqGhI/RpgHAKCWlu4Cqo9UrugpW0f23xJ/F/nn7b/af230B/459nvyP9w/cz2d8P/jVqBfjP8r/0v5c8RKAD7Bd+/qa+AfYA/nv9z4q6gL5NH+D/8/OX9Sf+33FvzUFY5mwonGYkDPVosNzE0LcRtyCRoulYvQzMh86hjFcl6jV6R8q4fZAa6u+plN2Lxi0eAF5n6nDCZ9emSy5T8XRsJi2CZBA0HySiqxaosetm2n++lUGV8tS25di0+urcp90cWAKKvKsRsTQZtT22Bnh6eoKJQ6JTUXsqdJU/5nEHwpA1X/zWcKKsRgulGqIh1Q4nsR4zq6JtLNFfn0HXTQx2nwWTKR79QzYYuux9zlkrUv83hx1c1CLofYLqZUMFw5wlCS3xbgVka0PeGVl7Y+EZJLLwRvTPlrKjN8r3UkwvAesK25Q2wkAdUpgcvu98OCc+NgNmMeGo8fAghek0Mf1CdVEXldJ/3uO09UyoQnLYJimYYmrX00yED/BiRwir9I/YTvXVBoxu/qU1gU5RDEbGZUi4093Qt7U9Gxs4fYHaybCxZqFDphac9I04cMyTG1sqw2qxGG5ugSm2RIJDrs3nR++BQMp5UaL3Ry7rhonmLxhdKVgI9a9xZcXB10q6emcdiz15c0/vi3UOplOCZhA5PgGMsIHGMSVc/601nj7cgRc/33sMVPc9KOQzY2wEFfLDNxNFaHc5QyCKs9vQd0TpKV6I15MvFkAFW2hRfBdTKakedrKHEcJVtunXxdnqKZRioMSWyFKE4W5gqsRepiKuJ3Wq5bUuxkTZxUbJQ68irEYLh9UemlqWljFhjsfNSDaMtpLy/83q8LaYUqUBaElfLTlWO4oyaBS7Bn/hOeQc6vKV9a/t279raQMDHD6+AAAA/v/E4zCEy3KdhoYLDVZuaox0+AZQR2QjKATe1auR0Upj4Y7yX4r4V9QOJFeT/F01CG/yIqDK+w9tlI9CmT2D7onZ4cWcUt7Xi2bWMvCZkHOPGkR9jZooMdzEUkK0tzzN9mHGIwVJuy66BmMP6ZzkoDDeV1Lqd4lmz4uplosmkT0KBB35U/MARZk7MlxP1e3yqfxkGH9MHKqC6s87+/BivqxRsnzsTeAsMyiSWG4UJgelbWAyz7XMyyvzOCeBbFJ8tafut3+xa4RJb5cHw+bz4n8EKE23+TFwiD27eMP5ndGxM1nSxrbeVyT5nNXCoaicba+H+JigtZXGoN0CYA1llm0RSsQu48BERqMjNeIgBgr8ku1zUuAJgj2rpPt9S4ETWbdlNu7xIgNDM5/n5sRbGT0VlbsRsGMo/vvfwGQf0S7tO4Mk193zJCCruqSswWwAW9rV5obSR2FpbNzfzzCQFGErVSwvlyv35/OAclhx3vr7MsfNZSwzXz2URF60x/kjZq/0T0FEH4Tu32l7IE3zPHTrbwBfXEbjHT9vpZ84IaNtQgkMGE1gWNrX4hOpFvQOZIEgGLAFYw/VNlasve43Sm2R61tzDdJMy5OLkOr4DO/c5/E2W7njmAKJqw4iVX7BHVq/X/Af2u11Oti0laPbL0ktcUec6g8nfjRPZuigga/sGRJdgMz+vLMZX5/46SBn3jXZzHHAeiJXgLSr/MD1ZbyaLo1wKMYt73r57qtvSCkx9mWcNmi1T1mQQpHIwM+01Q2sTR3B6aWCVPJmM9983RI6unayKsuws8McTCP86jMhyhazEjJfNn8qpY13s9/CjpbWGtEjyTd1sMI2gfFqjsdUHHyax1MLUU3B4WzSP1AkXxC2Kv/0JLq63mzXFc/jyfxAtjs8JwdiR8RmDuhIJ+nVu9GHc4VFcb/jQMwSSKvxEc/r4u6XAg1Oj+GdUTGnAlrCJPg+YWubYCOlsTIrkO9Qv4LVZgiEI1drggcGUOY4k7hHkAwH/yHzdm4/6AjwF/hOhW7U0orbyUF275p0be+bvkXGD+XJ/JWXyLu7/sFuJ1xI7r+Hsy7vO89TT28r9Ls00Y/ULyGgQEvFW/Nr5BrVgvvoilH1SlMW5mTyInXIz8WRi3/tWmejAybSeJI4JNuuSBVRD/oyK4kC8YjCYEn+Ph8u6fgG4mcCHEOnjdDyiq2xCuSg3HKFgkJ7vEzHBmqhSh+0zelpFN1xLXhOcHMd/vi8NDmmGjLcEHk9tWVlP339eYDT882bqTFzZJC/6RLStbCny8Rh+ja33r0PuhKfrIT+R8jriMNo9ZhLKhg5Z6+UYerpJY/+emBIyhrHwgkK+ZIf6kyde6sy9CRf+JB5sa2Bw1VzAHsJoFinPH7+vEUzeNiGo3Ehr0edjtJZXvLFilNaXaIq+wosMdzwCtV33kPmRqtXm0Zmh7/1iKRUOZtJuFEnWqj5szmCnB58h3/XAEd/oLWe6Lg5viyEbiu2ClykIYgQ2NvpZ1orjja7vACg1I7OoqfrmkyvCukJDeeq/Alv9gj0hHptgB9+fqdEVspArKUgwzgs7Rz9zGAP2RHalw1FmXN7ZeKq/y4J2SYpQ1NboyxzoKDEe7Ho3oeqzocvLD3orcbwTkZ3QX2A7iR1Lqylb0tkm5aWxXEOnJ23mv2Z4Ev4Dn4XbTjHkLKR3E3soxN4NtnJsu6LTmN+NEi4On4CWdna9i0cjpdTwaiP8KFH2aiVmNluDXODd7W5yT+Gqevk6kMIZWsD2qAGrPM1bTGEi2E3aka8k6yIpOeo2npLDyuv/uAFUJGizZYQ+hmWhrXOqqNVBssn0fNF0xu0C+i5i9fYCV1Tn94IM1WK5qYxEj4B6BGU1l5q7w+Hh+YwXnmoWren31/wKFn7dbpzM5xA6UMGCc9+8+Fa6CF/gfkblpZ+3pNVA4KnnWsRv4gt15XocHb/i5EbIznZtS7Fg0GsV2WzMutyrPv0oux14H0PlvU7FUiLsCauOGna90uUuI1RczkyeDs6kngHa7nveP9pg+ZiiKv/qj+ak2kaEK/syM5tXqAC1vXskHIVpb+p/qaXmy3kcAjdCw+vk6bVBrDUdJYOHapus5Q8GJaBma3iENlaoChdjKcVSDSupwKLYHzlRDO2+/+mAVpwggIAvc1gfapPuDuhCP0fN5u5wJN439bdx+Lmtz27s8C2gfIKSaImDf4pVtMeAJYoclYEbxZKkOzbUK5eKoBJ4EUMWssGBxKcQAr5xW/AlYpYcuJSOsu15PoOicEE4+mTxkb2dhtl+R/6o8Pf/vfbzk1yUIBi5cMadkuLgUqhA7fO81bzpVHOgnExEhHRK9svEY0E5r+p/+DFzuJP77Ja7MaRxIZRn1Prr5HITl9qnTdQtglkiK+8JlsFBuei2jMQuNqsB/xc/2vj3oOvqQtOoHlxaoqrWPJK9ZmSwDWnzmHJ6Vpgxk8xQ74Cutpmj3UvKVz8eUJLbS6yf1a+/fICiL/EpUz5K55AyKSsgfdhYJXZpGYpLE2DRQacw6u7v67Oykg80vv/ZGtPjOFsK0LwuH5twPXfmpfP7f/QUXk7PWqjREqzhzG0Qg2zEZSP1Ilxkz8b8UDulH9Kyr+aEkuwt/OjTSS2VfjmsNKkujqwwGteG17E160eI2Vg8kJklSBKhgO8J5joa+6jcXOF2k5ea7rQC8b8efqYtOyC1FzEYAGzNtpXG2CkSKbO0FEI+o0RiFq3nZCaIRb8Cpv1TIOz34csTBgh2+1FJJiZkVUZRZ4hWyDHJjmdijzm3iq+HAbrRXAOCNv6vpDAsg/d8oZux2zx2NPWfzSm+f/PicbSzBJ+JEPHTfI/sNtsB2EjFB/PFPQyOgQseBs3KXUabvsN4c+cfiL24IE36wTvaf5cDKYwl+bKXPLGnIOlL5eENpmOTlM8Amb6goWzA8KAbF2+H6iaC0D9gS6V4EJDVm7mV04DrdaAO30zuVtVX1APXvyrpcgmo97UKPz4t/X6sMuqj25FISLtRsFwP8vb2MsxRoeoE8qDIteowxFvWmGY8sd3H17nArVrrGpu4YbYhjidbTowWhxBd89YwfW87QM5wX2Kz2LshRTrWC9S+z0rVPnccyIDvjpmR0C0SixphbzXiN4GA4dfV1TF/DqC5j7wZtVzeOfe76fgGUgL2H45MPo57PIMSK4MUa9aiikiZ9TxLCTx70xUsKYjHgFxxXOLEK/7uVoqoLFdhnrgVbprxXEde0JkmRpeXgdsVoEBAYNdNd/v9mJPbgrQwcmemmHzKZGOIuYkheK/uERe6NG70Zlq28szwsNVX2sRCc5EUdP0GFRpJT+WQNVHp6TGp+DlrJ/iMN7XUXMXfGF2a41Mm/jwzems3/Slvv1paHucJ+ZYloywIJuNo0htIzdL2M6v7U0GIJ3ZGuuQnvnwwGqIO8rFymAx2IaD36ubkeKLhmAhyfapNy3evr7wYR25X5Q0evfp5OkjxJyyNqbJHLoIvrWvqXDhBCmdBA8OLJo+BPxIi2oqIx6xJHZkSzOJrlEOKIamjU7+kW1ZBBmO0V+rfsClD+TmxwkKCTZJOd7K5sBxtgl82sGRrnmdIsOMGJMYAAdXN/KeCuK+xlXelX2/Av0yTqpZMCTF2OujtyHbB6gCrm2jvkdByoRG5pWW8H+sK35G/PcDeAKuWcdhR5BiSYUnW46pGpz/0fbsdQB4BFv0CFP0qiKmQ2CnZVy4gaoXGYagPcywlIPwwo/RUXszaP4gaD1LYn9d9XSXvP6taAjU2qMF3jbBjprzn+dqUhxoTqp6FKFIMHWG4e2osw0G8omf+69q95nWA2UETQZ7vVz3do5ZsqN4r1VDsI9Ee10EKBD0NmaoEHEcgwQAF2P2WsZkvjj6AGOQebTJfw9xfqMTsGhxbDkwZgypcpwYM/5NHGlde/VsBHXuMBGqrkVVEpiAV8MkFhzaKVz9rwbS1yW1KxY7wxLlfReHrNmYF0WzSdkMON9SAAC3FiBGv8cikLoIf6Vh4ofjjW17Bn5BtdlvyEDoJXMODDn/JlvM0V9ltzBkLLonEkGvwgpEfWpxf+Tc4al/NqEjLAJwce2cyej3q18ld04RQ/2v9HnXzsK/5b2ns+pII/HJSyEFPp7mKHu49g3+zGkekWhsqZ7a0LTbDjJ0+mpfCZqm+1iBZjP79eEBmpgDlyV/xgv3VTWUDiU7H9ZeRNdyJupuxT8K1w8jLTHcJ/2sw1wPTIALe1YUeI5VeWW3q/wyeQB9/2pU2xnjlr058skPU7/pajH6yK091cSVJ2GsrJwl0yvXmwa++aZlYlD8+9zQySKssDPgzmbFB97ZyImXC2kISQVYITgnEl8GpvsmBsbmcmnz1qdUMlJiFGpbmm69iuTueoFj/iyUGeJhvYAIya1IBrpiEI6/14Mcr1CzSvwx7nOJArhnMHW+ity6PmfWMsMGPNfZ1X5Q4aUt7Wh4AgNlT3IfcCTueADrJYqeanYgk9hBIiQVFurFVfi6WSjq0xQgqks24QAAAA=="};
+</script>
+</body>
+</html>
